@@ -83,10 +83,10 @@ test('navigation and skip link resolve to unique on-page targets', () => {
 
 test('confirmed name is consistent and temporary copy is absent', () => {
   assert.match(markup, /<h1>Hongyun Wang<\/h1>/);
-  assert.match(markup, /<title>Hongyun Wang — ML Systems<\/title>/);
+  assert.match(markup, /<title>Hongyun Wang<\/title>/);
   assert.match(markup, /<footer\b[^>]*>[\s\S]*?Hongyun Wang/);
-  assert.equal(metadataValue('property', 'og:title'), 'Hongyun Wang — ML Systems');
-  assert.equal(metadataValue('name', 'twitter:title'), 'Hongyun Wang — ML Systems');
+  assert.equal(metadataValue('property', 'og:title'), 'Hongyun Wang');
+  assert.equal(metadataValue('name', 'twitter:title'), 'Hongyun Wang');
   assert.doesNotMatch(markup, /Xinan\s+Lin|not added|to confirm|awaiting|placeholder/i);
   assert.doesNotMatch(metadataValue('name', 'robots') || '', /noindex/);
   assert.doesNotMatch(
@@ -270,7 +270,10 @@ test('every text color meets WCAG AA contrast on the page background', () => {
 });
 
 test('metadata and the generated social image are site-specific', () => {
-  assert.match(markup, /<title>[^<]+ — ML Systems<\/title>/);
+  assert.deepEqual(
+    [...markup.matchAll(/<title\b[^>]*>([^<]*)<\/title>/g)].map((match) => match[1]),
+    ['Hongyun Wang'],
+  );
   assert.ok(metadataValue('name', 'description')?.includes('GPU systems'));
   const ogImage = metadataValue('property', 'og:image');
   const twitterImage = metadataValue('name', 'twitter:image');

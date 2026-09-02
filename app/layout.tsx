@@ -4,7 +4,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteMetadata.origin),
-  title: `${profile.name} — ML Systems`,
+  title: profile.name,
   description: siteMetadata.description,
   icons: { icon: '/favicon.svg' },
   alternates: { canonical: '/' },
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     url: '/',
-    title: `${profile.name} — ML Systems`,
+    title: profile.name,
     description: siteMetadata.description,
     images: [
       {
@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${profile.name} — ML Systems`,
+    title: profile.name,
     description: siteMetadata.description,
     images: [new URL(siteMetadata.socialImage, siteMetadata.origin).href],
   },
