@@ -1,0 +1,63 @@
+# dependencies
+node_modules/
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/.vinext/
+/out/
+
+# misc
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_ed25519
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+*.log
+
+# local environment
+.env*
+.dev.vars*
+.npmrc
+credentials*.json
+service-account*.json
+
+# deployment and generated files
+.vercel
+next-env.d.ts
+/dist/
+/.wrangler/
+/outputs/
+/work/
+*.tsbuildinfo
+/artifacts/
+/build/
+/.cache/
+/.npm/
+/.vite/
+
+# local hosting, agent, and editor state
+/.openai/
+/.codex/
+/.agents/
+/.idea/
+/.vscode/
