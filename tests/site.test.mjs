@@ -48,7 +48,7 @@ test('headings and language communicate the academic identity', () => {
     'Nanjing University',
     'School of Software',
     'CUDA Kernel Optimization',
-    'cuda-self-learning',
+    'GPU Performance Engineering',
   ]) {
     assert.ok(
       visibleText.includes(text),
@@ -146,13 +146,21 @@ test('About contains only the two requested sentences', () => {
 test('the project is a compact academic selected-work entry', () => {
   const project = markup.match(/<article\b[^>]*>[\s\S]*?<\/article>/)?.[0];
   assert.ok(project, 'The CUDA project is rendered');
-  assert.match(project, /<span>01<\/span><span>cuda-self-learning<\/span>/);
+  assert.match(
+    project,
+    /<div class="project-index"><span>01<\/span><span>GPU Performance Engineering<\/span><\/div>/,
+  );
   assert.match(project, /<h3 id="cuda-heading">CUDA Kernel Optimization<\/h3>/);
+  assert.doesNotMatch(project, /project-subtitle|cuda-self-learning/);
+  assert.equal((project.match(/GPU Performance Engineering/gi) || []).length, 1);
+  assert.match(
+    css,
+    /\.project-index\s*\{[^}]*display:\s*flex;[^}]*gap:\s*17px;[^}]*font-family:\s*var\(--font-mono\);[^}]*font-size:\s*11px;/,
+  );
   const paragraphs = [...project.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(
     (match) => match[1],
   );
   assert.deepEqual(paragraphs, [
-    'GPU performance engineering',
     'A hands-on study of GPU performance, from basic parallel primitives to attention kernels. ' +
       'The project explores CUDA kernel implementation and optimization through benchmarking and GPU profiling.',
     'CUDA · C++ · Nsight Compute · Nsight Systems',

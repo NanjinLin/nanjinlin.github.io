@@ -50,18 +50,16 @@ export const researchInterests = [
 ];
 
 type Project = {
-  repositoryName: string;
+  label: string;
   title: string;
-  subtitle: string;
   description: string;
   tools: string[];
   githubUrl: string;
 };
 
 export const cudaProject: Project = {
-  repositoryName: 'cuda-self-learning',
+  label: 'GPU Performance Engineering',
   title: 'CUDA Kernel Optimization',
-  subtitle: 'GPU performance engineering',
   description:
     'A hands-on study of GPU performance, from basic parallel primitives to attention kernels. ' +
     'The project explores CUDA kernel implementation and optimization through benchmarking and GPU profiling.',

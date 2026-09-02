@@ -94,10 +94,9 @@ export default function Home() {
             <article className="project" aria-labelledby="cuda-heading">
               <div className="project-index">
                 <span>01</span>
-                <span>{cudaProject.repositoryName}</span>
+                <span>{cudaProject.label}</span>
               </div>
               <h3 id="cuda-heading">{cudaProject.title}</h3>
-              <p className="project-subtitle">{cudaProject.subtitle}</p>
               <p className="project-description">{cudaProject.description}</p>
               <p className="technical-line">{cudaProject.tools.join(' · ')}</p>
 
