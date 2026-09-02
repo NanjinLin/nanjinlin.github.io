@@ -12,6 +12,7 @@ type Profile = {
   contactIntro: string;
   githubUrl: string;
   email: string;
+  wechat: string;
 };
 
 export const profile: Profile = {
@@ -28,6 +29,7 @@ export const profile: Profile = {
     'I am interested in research internships and RA opportunities in ML systems and GPU computing.',
   githubUrl: 'https://github.com/NanjinLin',
   email: '2518400042@smail.nju.edu.cn',
+  wechat: '576033624',
 };
 
 export const siteMetadata = {

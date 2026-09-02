@@ -46,6 +46,7 @@ export default function Home() {
                   href={`mailto:${profile.email}`}
                 />
               </li>
+              <li>WeChat: {profile.wechat}</li>
             </ul>
           </div>
         </div>
@@ -135,6 +136,10 @@ export default function Home() {
                     href={profile.githubUrl}
                   />
                 </dd>
+              </div>
+              <div>
+                <dt>WeChat</dt>
+                <dd>{profile.wechat}</dd>
               </div>
             </dl>
           </div>

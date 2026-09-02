@@ -95,7 +95,7 @@ test('confirmed name is consistent and temporary copy is absent', () => {
   );
 });
 
-test('profile and Contact use the supplied links without a missing CV entry', () => {
+test('profile and Contact use the supplied contacts without a missing CV entry', () => {
   const anchors = [...markup.matchAll(/<a\b[^>]*>/g)].map((match) =>
     attributes(match[0]),
   );
@@ -117,7 +117,12 @@ test('profile and Contact use the supplied links without a missing CV entry', ()
   }
   const profileLinks = markup.match(/<ul class="profile-links"[^>]*>([\s\S]*?)<\/ul>/)?.[1];
   assert.ok(profileLinks);
-  assert.equal((profileLinks.match(/<li\b/g) || []).length, 2);
+  const profileItems = [...profileLinks.matchAll(/<li>([\s\S]*?)<\/li>/g)].map(
+    (match) => match[1],
+  );
+  assert.equal(profileItems.length, 3);
+  assert.equal(profileItems[2], 'WeChat: 576033624');
+  assert.equal((profileLinks.match(/<a\b/g) || []).length, 2);
   assert.match(
     profileLinks,
     /<a href="mailto:2518400042@smail.nju.edu.cn">2518400042@smail.nju.edu.cn<\/a>/,
@@ -128,8 +133,10 @@ test('profile and Contact use the supplied links without a missing CV entry', ()
   assert.ok(contact?.includes('github.com/NanjinLin'));
   assert.deepEqual(
     [...contact.matchAll(/<dt>([^<]+)<\/dt>/g)].map((match) => match[1]),
-    ['Email', 'GitHub'],
+    ['Email', 'GitHub', 'WeChat'],
   );
+  assert.match(contact, /<div><dt>WeChat<\/dt><dd>576033624<\/dd><\/div>/);
+  assert.equal((visibleText.match(/576033624/g) || []).length, 2);
   assert.doesNotMatch(visibleText, /\bCV\b|Curriculum vitae/i);
 });
 
@@ -244,6 +251,8 @@ test('responsive layout, focus treatment, and reduced-motion support are defined
   assert.match(css, /:focus-visible\s*\{[^}]*outline:/);
   assert.match(css, /prefers-reduced-motion:\s*reduce/);
   assert.match(css, /\.skip-link:focus\s*\{[^}]*transform:\s*none/);
+  assert.match(css, /\.profile-links\s*\{[^}]*flex-wrap:\s*wrap;[^}]*font-size:\s*13px;/);
+  assert.match(css, /\.profile-links li \+ li::before\s*\{[^}]*content:\s*'·';/);
   assert.match(css, /\.profile-links li\s*\{[^}]*min-width:\s*0;[^}]*max-width:\s*100%;[^}]*overflow-wrap:\s*anywhere;/);
   assert.match(css, /@media\s*\(max-width:\s*640px\)[\s\S]*?\.profile-links\s*\{[^}]*flex-direction:\s*column;/);
   assert.match(css, /@media\s*\(max-width:\s*640px\)[\s\S]*?\.profile-links li \+ li::before\s*\{[^}]*content:\s*none;/);
