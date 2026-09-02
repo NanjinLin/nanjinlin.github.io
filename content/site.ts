@@ -32,7 +32,7 @@ export const profile: Profile = {
 
 export const siteMetadata = {
   // Replace only with the verified deployment origin, never a guessed hostname.
-  origin: 'http://localhost:3000',
+  origin: 'https://nanjinlin.github.io',
   description:
     'Undergraduate at Nanjing University, interested in MLSys, GPU systems, and efficient training and inference. ' +
     'CUDA kernel implementation, profiling, and optimization.',
