@@ -1,6 +1,6 @@
 # Research-oriented personal homepage
 
-克制、内容优先的个人学术主页。只有 About、Research Interests、Selected Projects、Contact 四个主区块，英文正文面向潜在导师和科研岗位。
+个人主页。只有 About、Research Interests、Selected Projects、Contact 四个主区块。
 
 ## 开发与预览
 
@@ -43,9 +43,6 @@ Windows 的构建命令通过一个很小的退出兼容层，让 HTTP 预渲染
 - 一套系统无衬线字体，一套系统等宽字体。黑白灰加深蓝，靠留白、对齐与分隔线组织内容。
 - 900px、640px、360px 响应式调整；手机改为单列，导航保留可见文字。
 - 提供 skip link、focus-visible、正确标题层级、reduced-motion 和打印样式。
-- 唯一展示的项目是用户提供的 `cuda-self-learning`；实现细节、benchmark 和 profiling 不在首页展开。
-
-设计参考仅用于学习信息层级，没有复制页面或个人经历：[Tri Dao](https://tridao.me/)、[Tianqi Chen](https://tqchen.com/)。
 
 ## 验证
 
