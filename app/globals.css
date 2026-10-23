@@ -214,6 +214,11 @@ h1 {
   padding-top: 43px;
   padding-bottom: 49px;
 }
+.project + .project {
+  margin-top: 38px;
+  padding-top: 34px;
+  border-top: 1px solid var(--border);
+}
 .project-index {
   display: flex;
   align-items: baseline;

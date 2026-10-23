@@ -1,7 +1,7 @@
 import {
   profile,
   researchInterests,
-  cudaProject,
+  selectedProjects,
 } from '@/content/site';
 import { ResourceLink } from '@/components/resource-link';
 
@@ -92,19 +92,28 @@ export default function Home() {
             Selected projects
           </h2>
           <div className="section-content">
-            <article className="project" aria-labelledby="cuda-heading">
-              <div className="project-index">
-                <span>01</span>
-                <span>{cudaProject.label}</span>
-              </div>
-              <h3 id="cuda-heading">{cudaProject.title}</h3>
-              <p className="project-description">{cudaProject.description}</p>
-              <p className="technical-line">{cudaProject.tools.join(' · ')}</p>
+            {selectedProjects.map((project, index) => (
+              <article
+                className="project"
+                aria-labelledby={`${project.id}-heading`}
+                key={project.id}
+              >
+                <div className="project-index">
+                  <span>{String(index + 1).padStart(2, '0')}</span>
+                </div>
+                <h3 id={`${project.id}-heading`}>{project.title}</h3>
+                {project.description.map((paragraph) => (
+                  <p className="project-description" key={paragraph}>
+                    {paragraph}
+                  </p>
+                ))}
+                <p className="technical-line">{project.tools.join(' · ')}</p>
 
-              <div className="project-links">
-                <ResourceLink label="GitHub" href={cudaProject.githubUrl} />
-              </div>
-            </article>
+                <div className="project-links">
+                  <ResourceLink label="GitHub" href={project.githubUrl} />
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 

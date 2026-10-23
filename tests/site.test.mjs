@@ -42,13 +42,13 @@ test('exactly four main sections, in the requested order', () => {
 test('headings and language communicate the academic identity', () => {
   assert.equal((markup.match(/<h1\b/g) || []).length, 1);
   assert.equal((markup.match(/<h2\b/g) || []).length, 4);
-  assert.equal((markup.match(/<h3\b/g) || []).length, 1);
+  assert.equal((markup.match(/<h3\b/g) || []).length, 2);
   assert.match(markup, /<html[^>]*lang="en"/);
   for (const text of [
     'Nanjing University',
     'School of Software',
-    'CUDA Kernel Optimization',
-    'GPU Performance Engineering',
+    'Pewee: W4A16 CUDA Kernel Library',
+    'CUDA Performance Engineering',
   ]) {
     assert.ok(
       visibleText.includes(text),
@@ -144,38 +144,47 @@ test('About contains only the two requested sentences', () => {
   const about = markup.match(/<p class="about-copy">([\s\S]*?)<\/p>/)?.[1];
   assert.equal(
     about,
-    'I am an undergraduate in the School of Software at Nanjing University. ' +
-      'My interests lie in machine learning systems, particularly GPU systems, ' +
-      'LLM training and inference, and efficient deep learning.',
+    'I am an undergraduate student in the School of Software at Nanjing University. ' +
+      'My interests focus on high-performance computing for AI, particularly kernel development, ' +
+      'GPU performance optimization, and efficient LLM inference.',
   );
 });
 
-test('the project is a compact academic selected-work entry', () => {
-  const project = markup.match(/<article\b[^>]*>[\s\S]*?<\/article>/)?.[0];
-  assert.ok(project, 'The CUDA project is rendered');
-  assert.match(
-    project,
-    /<div class="project-index"><span>01<\/span><span>GPU Performance Engineering<\/span><\/div>/,
+test('selected projects are compact entries in the requested order', () => {
+  const projects = [...markup.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/g)].map(
+    (match) => match[0],
   );
-  assert.match(project, /<h3 id="cuda-heading">CUDA Kernel Optimization<\/h3>/);
-  assert.doesNotMatch(project, /project-subtitle|cuda-self-learning/);
-  assert.equal((project.match(/GPU Performance Engineering/gi) || []).length, 1);
-  assert.match(
-    css,
-    /\.project-index\s*\{[^}]*display:\s*flex;[^}]*gap:\s*17px;[^}]*font-family:\s*var\(--font-mono\);[^}]*font-size:\s*11px;/,
-  );
-  const paragraphs = [...project.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map(
-    (match) => match[1],
-  );
-  assert.deepEqual(paragraphs, [
-    'A hands-on study of GPU performance, from basic parallel primitives to attention kernels. ' +
-      'The project explores CUDA kernel implementation and optimization through benchmarking and GPU profiling.',
-    'CUDA · C++ · Nsight Compute · Nsight Systems',
-  ]);
-  assert.doesNotMatch(
-    project,
-    /<(?:h[4-6]|ul|ol|dl|details|summary|figure|img|button)\b/,
-  );
+  assert.equal(projects.length, 2);
+  const expected = [
+    {
+      number: '01',
+      title: 'Pewee: W4A16 CUDA Kernel Library',
+      paragraphs: [
+        'A lightweight PyTorch CUDA extension for INT4 weight-only quantized inference, featuring fused dequantization, warp-level GEMV, and CuTe-based Tensor Core GEMM.',
+        'Integrated with nano-vLLM and evaluated on real LLM inference workloads to investigate memory savings and performance trade-offs.',
+        'CUDA · CuTe · CUTLASS · vllm · Quantization',
+      ],
+    },
+    {
+      number: '02',
+      title: 'CUDA Performance Engineering',
+      paragraphs: [
+        'A collection of CUDA kernel implementations and performance optimization experiments covering reduction, softmax, GEMM, and attention-related workloads.',
+        'Focused on GPU memory hierarchy, parallel execution, systematic benchmarking, and profiling-guided optimization.',
+        'CUDA · C++ · Nsight Compute · GPU Profiling',
+      ],
+    },
+  ];
+  projects.forEach((project, index) => {
+    assert.ok(project.includes(`<div class="project-index"><span>${expected[index].number}</span></div>`));
+    assert.equal(project.match(/<h3\b[^>]*>([^<]+)<\/h3>/)?.[1], expected[index].title);
+    assert.deepEqual(
+      [...project.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/g)].map((match) => match[1]),
+      expected[index].paragraphs,
+    );
+    assert.doesNotMatch(project, /project-subtitle|cuda-self-learning/);
+    assert.doesNotMatch(project, /<(?:h[4-6]|ul|ol|dl|details|summary|figure|img|button)\b/);
+  });
   assert.doesNotMatch(
     pageSource,
     /['"]use client['"]|onClick=|dangerouslySetInnerHTML/,
@@ -216,16 +225,21 @@ test('removed project detail UI and future-data placeholders are absent', () => 
   );
 });
 
-test('the project has exactly one GitHub link to the supplied repository', () => {
-  const project = markup.match(/<article\b[^>]*>[\s\S]*?<\/article>/)?.[0];
-  assert.ok(project);
-  const links = [...project.matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
-  assert.equal(links.length, 1);
-  assert.equal(
-    attributes(links[0][0]).href,
+test('each project has one external GitHub link to its supplied repository', () => {
+  const projects = [...markup.matchAll(/<article\b[^>]*>[\s\S]*?<\/article>/g)];
+  const urls = [
+    'https://github.com/NanjinLin/Pewee',
     'https://github.com/NanjinLin/cuda-performance-engineering',
-  );
-  assert.equal(links[0][2].replace(/<[^>]+>/g, ''), 'GitHub ↗');
+  ];
+  projects.forEach((project, index) => {
+    const links = [...project[0].matchAll(/<a\b([^>]*)>([\s\S]*?)<\/a>/g)];
+    assert.equal(links.length, 1);
+    const link = attributes(links[0][0]);
+    assert.equal(link.href, urls[index]);
+    assert.equal(link.target, '_blank');
+    assert.equal(link.rel, 'noopener noreferrer');
+    assert.equal(links[0][2].replace(/<[^>]+>/g, ''), 'GitHub ↗');
+  });
 });
 
 test('no template decoration, marketing filler, or extra sections', () => {
@@ -291,7 +305,7 @@ test('metadata and the generated social image are site-specific', () => {
     [...markup.matchAll(/<title\b[^>]*>([^<]*)<\/title>/g)].map((match) => match[1]),
     ['Hongyun Wang'],
   );
-  assert.ok(metadataValue('name', 'description')?.includes('GPU systems'));
+  assert.ok(metadataValue('name', 'description')?.includes('high-performance computing for AI'));
   const ogImage = metadataValue('property', 'og:image');
   const twitterImage = metadataValue('name', 'twitter:image');
   assert.ok(ogImage?.endsWith('/og.png'));

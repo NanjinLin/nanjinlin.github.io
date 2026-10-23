@@ -23,7 +23,7 @@ export const metadata: Metadata = {
         url: new URL(siteMetadata.socialImage, siteMetadata.origin).href,
         width: siteMetadata.socialImageWidth,
         height: siteMetadata.socialImageHeight,
-        alt: `${profile.name} — ML Systems. Undergraduate at ${profile.university}.`,
+        alt: `${profile.name} — HPC for AI. Undergraduate at ${profile.university}.`,
       },
     ],
   },
